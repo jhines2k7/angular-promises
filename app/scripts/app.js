@@ -12,18 +12,35 @@ angular
   .module('angularPromisesApp', [])
 
   .run(function(User, TravelService, WeatherService){
+    /*
     TravelService
       .getDeparture(User.email)
       .then(function(departure){
         console.log(departure);
       });
+    */
+    var loadDeparture = function(User) {
+      return TravelService
+        .getDeparture(User.email)
+        .then(function(departure){
+          return departure.flightID;
+        });
+    };
+
+    var loadFlight = function(flightID) {
+      return TravelService
+        .getFlight(flightID)
+        .then(function(flight){
+          return flight;
+        });
+    };
   })
 
   .factory('User', function(){
     return {
       name: 'James Hines',
       email: 'jameshines10@gmail.com'
-    }
+    };
   })
 
   .factory('TravelService', function($q, User){
@@ -51,7 +68,7 @@ angular
           status: 'onTime'
         });
       }
-    }
+    };
   })
 
   .factory('WeatherService', function($q) {
@@ -62,5 +79,5 @@ angular
           forecast: 'rain'
         });
       }
-    }
+    };
   });
