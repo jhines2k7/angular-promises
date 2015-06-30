@@ -19,10 +19,16 @@ angular
         console.log(departure);
       });
     */
-    var loadDeparture = function(User) {
+    var departureDate;
+
+    var loadDeparture = function(user) {
       return TravelService
-        .getDeparture(User.email)
+        .getDeparture(user.email)
         .then(function(departure){
+          departureDate = departure.date;
+
+          console.log(departure);
+
           return departure.flightID;
         });
     };
@@ -31,9 +37,23 @@ angular
       return TravelService
         .getFlight(flightID)
         .then(function(flight){
+          console.log(flight);
           return flight;
         });
     };
+
+    var loadForecast = function() {
+      return WeatherService
+        .getForecast(departureDate)
+        .then(function(weather){
+          console.log(weather);
+          return weather;
+        });
+    };
+
+    loadDeparture(User)
+      .then(loadFlight)
+      .then(loadForecast);
   })
 
   .factory('User', function(){
